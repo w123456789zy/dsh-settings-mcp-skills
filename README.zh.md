@@ -21,14 +21,23 @@ DeepSeek 通过 npm 分发的 `dsh`（`npm install -g @deepseek-ai/dsh`）自带
 
 ## 安装
 
-直接从 GitHub 仓库装到 `web` profile：
+装到 `web` profile。本插件已发布到 npm，最简单的用法直接用包名（无需 `github:`）：
 
 ```sh
-dsh plugin --profile web add github:w123456789zy/dsh-settings-mcp-skills
+dsh plugin --profile web add dsh-settings-mcp-skills
 ```
 
-这是源码安装，首次运行时 pnpm 不需要任何构建（依赖包已预构建），装好即可。
-启动后，设置里会出现两个新页面：
+安装时 pnpm 会运行一个随 bundle 自带的小型 `postinstall` 脚本。它**不做编译、
+也不联网**，只是把两个已预构建的官方包（以 tarball 形式放在 `deps/` 下）解压到
+你的 profile 的 `node_modules`，这样设置页面才能加载。
+
+pnpm（≥10）会拦截构建脚本（`postinstall`/`prepare`），直到放行为止——**无论
+npm 还是 git 安装都一样**。第一次运行时 pnpm 会打印出确切的包 key 和要编辑的
+文件。把该 key 设为 `true`，放进你的 profile 的
+`$DSH_HOME/profiles/web/pnpm-workspace.yaml` 里的 `allowBuilds` 下，然后重跑
+同一条 `add` 命令即可。这一步只需做一次。
+
+安装完成后启动，设置里会出现两个新页面：
 
 ```sh
 dsh --profile web
@@ -40,15 +49,19 @@ dsh --profile web
 dsh plugin --profile web remove dsh-settings-mcp-skills
 ```
 
-也可以从本地克隆或 tarball 安装：
+固定版本以保证可复现：`dsh-settings-mcp-skills@0.1.0`。
+
+也可以从 GitHub 仓库或本地克隆 / tarball 安装：
 
 ```sh
+dsh plugin --profile web add github:w123456789zy/dsh-settings-mcp-skills
 dsh plugin --profile web add ./dsh-settings-mcp-skills
 # 或
 dsh plugin --profile web add ./dsh-settings-mcp-skills-0.1.0.tgz
 ```
 
-固定某个 commit 以保证可复现：`github:w123456789zy/dsh-settings-mcp-skills#<sha>`。
+这些来源同样需要 `allowBuilds`（pnpm 对 `postinstall` 的拦截与来源无关）。
+固定 git commit 以保证可复现：`github:w123456789zy/dsh-settings-mcp-skills#<sha>`。
 
 ## 它会装什么
 
@@ -68,8 +81,8 @@ dsh plugin --profile web add ./dsh-settings-mcp-skills-0.1.0.tgz
 本 bundle 自身采用 MIT 许可证。它再分发了两个 DeepSeek Harness 包
 （`@deepseek-ai/dsh-client-ui-settings-tools` 和 `@deepseek-ai/dsh-host-tool-settings`），
 它们是 DeepSeek 的组件，采用 **MIT、Copyright (c) 2026 DeepSeek**。
-每个包都在 `deps/<name>/` 下随附其未改动的 `LICENSE`，
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 记录了署名。
+它们以 bundled tarball 的形式放在 `deps/` 下，每个 tarball 内都附带其未改动的
+MIT `LICENSE`。[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 记录了署名。
 这种再分发是它们的 MIT 许可证所允许的。
 
 ## 构建 / 打包

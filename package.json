@@ -11,15 +11,15 @@
     "README.zh.md",
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
+    "scripts/**",
     "deps/**"
   ],
+  "scripts": {
+    "postinstall": "node scripts/prepare.mjs"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
-  },
-  "dependencies": {
-    "@deepseek-ai/dsh-client-ui-settings-tools": "file:deps/dsh-client-ui-settings-tools",
-    "@deepseek-ai/dsh-host-tool-settings": "file:deps/dsh-host-tool-settings"
   }
 }

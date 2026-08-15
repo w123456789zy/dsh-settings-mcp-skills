@@ -26,15 +26,25 @@ mechanisms.
 
 ## Install
 
-Install into your `web` profile straight from this GitHub repository:
+Install into your `web` profile. This plugin is published to npm, so the
+simplest path is the package name (no `github:` needed):
 
 ```sh
-dsh plugin --profile web add github:w123456789zy/dsh-settings-mcp-skills
+dsh plugin --profile web add dsh-settings-mcp-skills
 ```
 
-This is a sources install, so on the first run pnpm will build nothing (the
-bundled packages are already pre-built) and the profile is ready. Boot and the
-two new pages appear under **Settings**:
+On install pnpm runs a small `postinstall` script that ships with the bundle.
+It does **no compilation and reaches no network** — it only extracts the two
+pre-built official packages (bundled as tarballs under `deps/`) into your
+profile's `node_modules` so the settings pages can load.
+
+pnpm (≥10) blocks build scripts (`postinstall`/`prepare`) until they are
+allowlisted — for **both** npm and git installs. On the first run, pnpm prints
+the exact package key and the file to edit. Set that key to `true` under
+`allowBuilds` in your profile's `$DSH_HOME/profiles/web/pnpm-workspace.yaml`,
+then re-run the same `add` command. You only do this once.
+
+Once installed, boot and the two new pages appear under **Settings**:
 
 ```sh
 dsh --profile web
@@ -46,15 +56,20 @@ To uninstall:
 dsh plugin --profile web remove dsh-settings-mcp-skills
 ```
 
-You can also install from a local clone or a tarball:
+**Pin a version** for repeatability: `dsh-settings-mcp-skills@0.1.0`.
+
+You can also install from the GitHub repository or a local clone/tarball:
 
 ```sh
+dsh plugin --profile web add github:w123456789zy/dsh-settings-mcp-skills
 dsh plugin --profile web add ./dsh-settings-mcp-skills
 # or
 dsh plugin --profile web add ./dsh-settings-mcp-skills-0.1.0.tgz
 ```
 
-Pin a commit for repeatability: `github:w123456789zy/dsh-settings-mcp-skills#<sha>`.
+The `allowBuilds` step applies to these too (pnpm gates `postinstall`
+regardless of source). Pin a git commit for repeatability:
+`github:w123456789zy/dsh-settings-mcp-skills#<sha>`.
 
 ## What it installs
 
@@ -75,9 +90,9 @@ or home-level `cordis.patch.yml`.
 This bundle itself is MIT. It re-distributes two DeepSeek Harness packages
 (`@deepseek-ai/dsh-client-ui-settings-tools` and `@deepseek-ai/dsh-host-tool-settings`),
 which are DeepSeek components licensed **MIT, Copyright (c) 2026 DeepSeek**.
-Each ships its own unchanged `LICENSE` under `deps/<name>/`, and
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) records the attribution. This
-re-distribution is permitted by their MIT license.
+They ship as bundled tarballs under `deps/`, and each tarball carries its own
+unchanged MIT `LICENSE`. [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+records the attribution. This re-distribution is permitted by their MIT license.
 
 ## Building / packaging
 
