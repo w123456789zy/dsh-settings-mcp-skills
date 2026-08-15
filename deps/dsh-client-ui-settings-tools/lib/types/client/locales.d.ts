@@ -1,0 +1,65 @@
+/** Copy dictionaries for the MCP and skills settings pages. */
+/** English strings (the key-set source of truth for this pair). */
+export declare const en: {
+    mcpNav: string;
+    mcpTitle: string;
+    mcpIntro: string;
+    mcpAdd: string;
+    mcpTransport: string;
+    mcpTransportStdio: string;
+    mcpTransportHttp: string;
+    mcpServerName: string;
+    mcpServerNameHint: string;
+    mcpServerNameInvalid: string;
+    mcpServerNameTaken: string;
+    mcpCommand: string;
+    mcpCommandHint: string;
+    mcpArgs: string;
+    mcpArgsHint: string;
+    mcpEnv: string;
+    mcpEnvHint: string;
+    mcpUrl: string;
+    mcpUrlHint: string;
+    mcpHeaders: string;
+    mcpHeadersHint: string;
+    mcpTimeout: string;
+    mcpTimeoutHint: string;
+    mcpFailOnStartup: string;
+    mcpFailOnStartupHint: string;
+    mcpSave: string;
+    mcpSaveOk: string;
+    mcpDelete: string;
+    mcpDeleteConfirm: string;
+    mcpDeleteDesc: string;
+    mcpDeleteOk: string;
+    mcpConnecting: string;
+    mcpConnected: string;
+    mcpConnectedWithTools: string;
+    mcpDisconnected: string;
+    mcpReconnecting: string;
+    mcpFailed: string;
+    mcpEmpty: string;
+    mcpError: string;
+    skillsNav: string;
+    skillsTitle: string;
+    skillsIntro: string;
+    skillsDropHint: string;
+    skillsDropHintActive: string;
+    skillsDropError: string;
+    skillsEmpty: string;
+    skillsLoaded: string;
+    skillsLoading: string;
+    skillsError: string;
+    skillsPath: string;
+    skillsDelete: string;
+    skillsDeleteConfirm: string;
+    skillsDeleteDesc: string;
+    skillsDeleteOk: string;
+    skillsUploadOk: string;
+    skillsUploadError: string;
+};
+export type ToolsKey = keyof typeof en;
+export declare const zh: {
+    [Key in keyof typeof en]: string;
+};
+//# sourceMappingURL=locales.d.ts.map

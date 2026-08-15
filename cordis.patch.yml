@@ -1,0 +1,15 @@
+# dsh-web-settings-tools bundle patch.
+# Adds the MCP and Skills settings pages (DeepSeek's official tool-settings
+# plugins) to the dsh web profile. Applied after web-app's layer, so it only
+# inserts the two rows that an npm-shipped web-app omits.
+
+- insert:
+    # Browser page: MCP servers + Skills settings, registered as a
+    # settings.section slot by the package's dsh.client manifest.
+    - id: ui-settings-tools
+      name: '@deepseek-ai/dsh-client-ui-settings-tools'
+
+    # Host-side service: owns the `mcp-servers` and `skill-sources` settings
+    # namespaces and projects uploaded skills to $DSH_HOME/skills/<name>/SKILL.md.
+    - id: host-tool-settings
+      name: '@deepseek-ai/dsh-host-tool-settings'
