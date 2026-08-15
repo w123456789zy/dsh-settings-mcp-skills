@@ -21,6 +21,7 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  realpathSync,
   renameSync,
   rmSync,
   statSync,
@@ -115,6 +116,35 @@ function findProfileDir(start) {
   return null
 }
 
+/**
+ * rc.6 compat: the npm-shipped dsh (rc.6) hardcodes the settings-API allowlist
+ * `PRODUCT_SETTINGS_NAMESPACES` without `mcp-servers` / `skill-sources`, so the
+ * browser can neither read nor write those namespaces (rc.7 adds them). This
+ * patches the installed dsh-host-apiproxy (resolved through the healed
+ * `profiles/node_modules` link) to expose them. Idempotent; a dsh upgrade
+ * replaces the file, so re-running `dsh plugin add` re-applies it.
+ */
+function patchApiProxyAllowlist(profilesNodeModules) {
+  const linkPath = join(profilesNodeModules, '@deepseek-ai', 'dsh-host-apiproxy')
+  let realDir
+  try {
+    realDir = realpathSync(linkPath)
+  } catch {
+    return
+  }
+  const indexJs = join(realDir, 'lib', 'index.js')
+  if (!existsSync(indexJs)) return
+  const src = readFileSync(indexJs, 'utf8')
+  if (/["']mcp-servers["']\s*,\s*["']skill-sources["']/.test(src)) return
+  const before = 'const PRODUCT_SETTINGS_NAMESPACES = new Set(["ui-onboarding", SETTINGS_NAMESPACE]);'
+  if (!src.includes(before)) return
+  const patched = src.replace(
+    before,
+    'const PRODUCT_SETTINGS_NAMESPACES = new Set(["ui-onboarding", SETTINGS_NAMESPACE, "mcp-servers", "skill-sources"]);',
+  )
+  writeFileSync(indexJs, patched)
+}
+
 const profileDir = findProfileDir(ROOT)
 if (!profileDir) {
   process.exit(0)
@@ -129,3 +159,5 @@ for (const name of TARBALLS) {
   installTgz(ROOT, tgzPath, join(profileDir, 'node_modules'))
   installTgz(ROOT, tgzPath, join(dirname(profileDir), 'node_modules'))
 }
+
+patchApiProxyAllowlist(join(dirname(profileDir), 'node_modules'))
