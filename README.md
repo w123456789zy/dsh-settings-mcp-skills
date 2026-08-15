@@ -1,5 +1,7 @@
 # dsh-settings-mcp-skills
 
+English | [中文](README.zh.md)
+
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) **bundle**
 plugin that adds the **MCP Servers** and **Skills** settings pages to the dsh
 web UI.
@@ -27,7 +29,7 @@ mechanisms.
 Install into your `web` profile straight from this GitHub repository:
 
 ```sh
-dsh plugin --profile web add github:<you>/dsh-settings-mcp-skills
+dsh plugin --profile web add github:w123456789zy/dsh-settings-mcp-skills
 ```
 
 This is a sources install, so on the first run pnpm will build nothing (the
@@ -52,7 +54,7 @@ dsh plugin --profile web add ./dsh-settings-mcp-skills
 dsh plugin --profile web add ./dsh-settings-mcp-skills-0.1.0.tgz
 ```
 
-Pin a commit for repeatability: `github:<you>/dsh-settings-mcp-skills#<sha>`.
+Pin a commit for repeatability: `github:w123456789zy/dsh-settings-mcp-skills#<sha>`.
 
 ## What it installs
 

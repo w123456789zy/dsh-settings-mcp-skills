@@ -1,4 +1,4 @@
-# dsh-web-settings-tools bundle patch.
+# dsh-settings-mcp-skills bundle patch.
 # Adds the MCP and Skills settings pages (DeepSeek's official tool-settings
 # plugins) to the dsh web profile. Applied after web-app's layer, so it only
 # inserts the two rows that an npm-shipped web-app omits.
