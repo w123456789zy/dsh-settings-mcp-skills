@@ -37,6 +37,18 @@ npm 还是 git 安装都一样**。第一次运行时 pnpm 会打印出确切的
 `$DSH_HOME/profiles/web/pnpm-workspace.yaml` 里的 `allowBuilds` 下，然后重跑
 同一条 `add` 命令即可。这一步只需做一次。
 
+**pnpm 11 release-age 门禁**：新版本发布后约 10 天内，pnpm 可能静默装回更旧
+的版本（例如 `add` 解析成 `0.1.0`，而 `latest` 已是 `0.1.1`）。如果
+`dsh plugin ... add` 显示 `+1` 却没有运行 `postinstall`（或设置页仍不出现），
+把版本号加进 profile 的 `pnpm-workspace.yaml` 再重装：
+
+```yaml
+minimumReleaseAgeExclude:
+  - dsh-settings-mcp-skills@0.1.1
+```
+
+然后 `dsh plugin --profile web add dsh-settings-mcp-skills@0.1.1`。
+
 安装完成后启动，设置里会出现两个新页面：
 
 ```sh

@@ -44,6 +44,19 @@ the exact package key and the file to edit. Set that key to `true` under
 `allowBuilds` in your profile's `$DSH_HOME/profiles/web/pnpm-workspace.yaml`,
 then re-run the same `add` command. You only do this once.
 
+**pnpm 11 release-age gate:** for ~10 days after a new version ships, pnpm may
+silently install an older version instead (e.g. `add` resolves `0.1.0` while
+`latest` is `0.1.1`). If `dsh plugin ... add` reports `+1` but you do not see
+`postinstall` run (or the settings pages still do not appear), add the version
+to your profile's `pnpm-workspace.yaml` and re-add:
+
+```yaml
+minimumReleaseAgeExclude:
+  - dsh-settings-mcp-skills@0.1.1
+```
+
+Then `dsh plugin --profile web add dsh-settings-mcp-skills@0.1.1`.
+
 Once installed, boot and the two new pages appear under **Settings**:
 
 ```sh
