@@ -80,9 +80,25 @@ function installTgz(pkgRoot, tgzPath, destNodeModules) {
     const destName = join(target, pkgName)
     if (existsSync(destName) && statSync(destName).isDirectory()) rmSync(destName, { recursive: true, force: true })
     renameSync(unpacked, destName)
+    if (pkgName === 'dsh-host-tool-settings') patchLegacyLoaderCompat(destName)
   } finally {
     rmSync(staging, { recursive: true, force: true })
   }
+}
+
+function patchLegacyLoaderCompat(destDir) {
+  const indexJs = join(destDir, 'lib', 'index.js')
+  if (!existsSync(indexJs)) return
+  const src = readFileSync(indexJs, 'utf8')
+  // Guard: never double-patch on re-install
+  if (/export\s*\{[^}]*ToolSettingsService\s+as\s+default/.test(src)) return
+  const patch = `\n/* legacy-loader compat (dsh-settings-mcp-skills): expose the Service
+ * class as the default export so older cordis-plugin-loader versions that only
+ * unwrap a default can instantiate it (rc.6). Newer loaders also accept this.
+ */
+export { ToolSettingsService as default };
+`
+  writeFileSync(indexJs, src + patch)
 }
 
 function findProfileDir(start) {
